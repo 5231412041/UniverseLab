@@ -1,0 +1,24 @@
+#!/bin/bash
+# 1. Clear old mesh
+rm -rf [1-9]* constant/polyMesh
+
+# 2. Build tunnel
+blockMesh
+
+# 3. Extract Features
+surfaceFeatures -dict system/surfaceFeaturesDict
+
+# 4. Carve the Car (Using the exact car settings)
+snappyHexMesh -overwrite
+
+# 5. Physics Labels
+if grep -q "car" constant/polyMesh/boundary; then
+    sed -i '/walls/,/}/ s/type *patch;/type wall;/' constant/polyMesh/boundary
+    sed -i '/car/,/}/ s/type *patch;/type wall;/' constant/polyMesh/boundary
+    
+    # 6. Run Physics
+    foamRun -solver incompressibleFluid
+    touch result.foam
+else
+    echo "ERROR: Car not found in mesh."
+fi
