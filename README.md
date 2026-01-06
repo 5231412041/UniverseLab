@@ -65,3 +65,62 @@ result.foam: The bridge file for reading CFD data.
 Empty Mesh: Ensure the STL model is "watertight" (no holes).
 
 Permission Denied: Run chmod +x Allrun to allow the script to execute.
+
+## 🚀 Execution Guide
+
+### Step 1: Launch the Dashboard
+
+```bash
+streamlit run app.py
+```
+
+### Step 2: Upload & Simulate
+
+- Upload a **watertight `.stl` model**
+- Click **🚀 Run Simulation**
+- Wait until the solver prints **End** in the terminal
+
+### Step 3: Analyze Results
+
+- The **3D Interactive Flow View** appears when results are ready
+- Review **Top Air Velocity** in the Aerodynamics Report
+- Export results as a **`.glb` file**
+
+---
+
+## 📂 Project Structure
+
+```
+app.py        → Web interface & GLB export logic
+Allrun        → OpenFOAM solver orchestration script
+system/       → Meshing & physics configuration dictionaries
+result.foam   → CFD data reference file
+```
+
+---
+
+## 🧠 The Core Project Structure (Explained Clearly)
+
+| Folder / File       | Importance |
+|---------------------|-----------|
+| **app.py** | The main Streamlit app — acts as the UI *and* orchestrator that triggers CFD jobs. |
+| **0/** | Initial conditions — defines inlet wind velocity (20 m/s) and pressure fields. |
+| **constant/** | Physics setup — contains `transportProperties` and the `triSurface/` folder where STL geometry is stored. |
+| **system/** | The CFD logic layer — includes dictionaries like `blockMeshDict`, `snappyHexMeshDict`, and `controlDict` that tell OpenFOAM how to mesh and solve the equations. |
+| **Allrun** | Automation script — runs the full OpenFOAM pipeline in sequence. |
+| **requirements.txt** | Lists Python dependencies such as `streamlit`, `pyvista`, and `pyvistaqt`. |
+| **README.md** | Project documentation and setup guide. |
+
+---
+
+## ⚠️ Troubleshooting
+
+**Empty Mesh** → Ensure the STL model is fully *watertight* (no holes)
+
+**Permission Denied** → Allow script execution:
+
+```bash
+chmod +x Allrun
+```
+
+
