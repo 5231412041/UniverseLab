@@ -1,0 +1,34 @@
+FoamFile { version 2.0; format ascii; class dictionary; object snappyHexMeshDict; }
+castellatedMesh true;
+snap            true;
+addLayers       false;
+geometry { car.stl { type triSurfaceMesh; name car; } };
+castellatedMeshControls {
+    maxLocalCells 1000000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 3;
+    resolveFeatureAngle 30;
+    allowFreeStandingZoneFaces true;
+    features ( { file "car.eMesh"; level 0; } );
+    refinementSurfaces { car { level (2 2); } };
+    refinementRegions { car { mode distance; levels ((0.1 3)); } };
+    locationInMesh (3.0 3.0 3.0); 
+}
+snapControls { nSmoothPatch 3; tolerance 2.0; nSolveIter 30; nRelaxIter 5; }
+addLayersControls { relativeSizes true; layers { "car.*" { nSurfaceLayers 1; } } expansionRatio 1.0; finalLayerThickness 0.3; minThickness 0.1; }
+meshQualityControls { 
+    maxNonOrtho 65; 
+    maxBoundarySkewness 20; 
+    maxInternalSkewness 4; 
+    maxConcave 80; 
+    minVol 1e-13; 
+    minTetQuality 1e-15;
+    minFaceWeight 0.05;
+    minVolRatio 0.01;
+    minArea -1;
+    minTwist -1;
+    minDeterminant 0.001;
+    minFaceFlatness -1;
+}
+mergeTolerance 1e-6;
